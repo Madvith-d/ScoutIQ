@@ -8,6 +8,8 @@ import Landing from './pages/LandingPage'
 import Login from './pages/LoginPage'
 import Signup from './pages/SignUpPage'
 import Home from './pages/HomePage'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -26,18 +28,16 @@ function App() {
   }, [])
   return (
     <div className="min-h-screen w-full bg-background flex items-center justify-center p-4 dark ">
-
+      <ToastContainer position="top-right" autoClose={3000} />
+      
       <Routes>
         <Route path="/" element={<Navigate to="/landing" replace />} />
         <Route path="/landing" element={<Landing />} />
         <Route path="/login" element={!authUser ? <Login /> : <Navigate to="/home" replace />} />
         <Route path="/signup" element={!authUser ? <Signup /> : <Navigate to="/home" replace />} />
         <Route path="/home" element={authUser ? <Home /> : <Navigate to="/login" replace />} />
-
       </Routes>
-
     </div>
-
   )
 }
 
