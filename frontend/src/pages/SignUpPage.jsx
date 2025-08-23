@@ -4,6 +4,9 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 const SignUpPage = () => {
+
+
+
   return (
     <div className='min-h-screen w-full bg-background flex items-center justify-center p-4'>
       <Card className='w-full max-w-md'>
