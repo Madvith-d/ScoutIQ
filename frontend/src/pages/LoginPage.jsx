@@ -38,9 +38,8 @@ const LoginPage = () => {
       
       // Login successful
       toast.success('Login successful')
-      localStorage.setItem('token', await user.getIdToken())
+      // Firebase auth state listener will handle the redirect automatically
       setLoading(false)
-      navigate('/home')
     } catch (error) {
       setLoading(false)
       

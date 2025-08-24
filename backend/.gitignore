@@ -1,4 +1,4 @@
 .env
 node_modules
-config/scoutiq-6c64b-firebase-adminsdk-fbsvc-e0be802d3d.json
+src/config/scoutiq-6c64b-firebase-adminsdk-fbsvc-e0be802d3d.json
 
