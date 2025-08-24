@@ -64,20 +64,22 @@ export class ResumeController {
       const userId = req.user.uid;
       const { page = 1, limit = 10 } = req.query;
 
+      // Simplified query to avoid composite index requirement
       const snapshot = await firestore
         .collection('resumes')
         .where('userId', '==', userId)
-        .orderBy('createdAt', 'desc')
-        .limit(parseInt(limit))
-        .offset((parseInt(page) - 1) * parseInt(limit))
         .get();
 
-      const analyses = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-        createdAt: doc.data().createdAt.toDate(),
-        updatedAt: doc.data().updatedAt.toDate()
-      }));
+      // Sort in memory to avoid index requirement
+      const analyses = snapshot.docs
+        .map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+          createdAt: doc.data().createdAt.toDate(),
+          updatedAt: doc.data().updatedAt.toDate()
+        }))
+        .sort((a, b) => b.createdAt - a.createdAt)
+        .slice((parseInt(page) - 1) * parseInt(limit), parseInt(page) * parseInt(limit));
 
       res.json({
         success: true,
@@ -125,6 +127,52 @@ export class ResumeController {
     } catch (error) {
       console.error("Get analysis error:", error);
       res.status(500).json({ error: "Failed to fetch analysis" });
+    }
+  }
+
+  static async getUserStats(req, res) {
+    try {
+      const userId = req.user.uid;
+
+      // Get all analyses for the user
+      const snapshot = await firestore
+        .collection('resumes')
+        .where('userId', '==', userId)
+        .get();
+
+      const analyses = snapshot.docs.map(doc => doc.data());
+      
+      // Calculate stats
+      const totalAnalyses = analyses.length;
+      
+      // Calculate average ATS score
+      const validScores = analyses
+        .filter(analysis => analysis.analysis && typeof analysis.analysis.ats_score === 'number')
+        .map(analysis => analysis.analysis.ats_score);
+      
+      const averageScore = validScores.length > 0 
+        ? Math.round(validScores.reduce((sum, score) => sum + score, 0) / validScores.length)
+        : 0;
+
+      // Calculate this month's analyses
+      const now = new Date();
+      const thisMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+      const thisMonthAnalyses = analyses.filter(analysis => 
+        analysis.createdAt.toDate() >= thisMonth
+      ).length;
+
+      res.json({
+        success: true,
+        stats: {
+          totalAnalyses,
+          averageScore,
+          thisMonth: thisMonthAnalyses
+        }
+      });
+
+    } catch (error) {
+      console.error("Get stats error:", error);
+      res.status(500).json({ error: "Failed to fetch user stats" });
     }
   }
 }

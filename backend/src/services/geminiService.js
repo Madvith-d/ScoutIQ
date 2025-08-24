@@ -3,38 +3,66 @@ import fetch from "node-fetch";
 export class GeminiService {
   static async analyzeResume(resumeText, jobDescription) {
     try {
-      const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${process.env.GEMINI_API_KEY}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            contents: [
-              {
-                role: "user",
-                parts: [
-                  {
-                    text: this.buildAnalysisPrompt(resumeText, jobDescription)
-                  }
-                ]
-              }
-            ]
-          })
-        }
-      );
+      console.log('Starting Gemini API analysis...');
+      console.log('API Key available:', !!process.env.GEMINI_API_KEY);
+      
+      const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`;
+      console.log('API URL:', url.replace(process.env.GEMINI_API_KEY, '***'));
+      
+      const prompt = this.buildAnalysisPrompt(resumeText, jobDescription);
+      console.log('Prompt length:', prompt.length);
+      
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          contents: [
+            {
+              role: "user",
+              parts: [
+                {
+                  text: prompt
+                }
+              ]
+            }
+          ]
+        })
+      });
 
+      console.log('Gemini API response status:', response.status);
+      
       if (!response.ok) {
-        throw new Error(`Gemini API error: ${response.status}`);
+        const errorText = await response.text();
+        console.error('Gemini API error response:', errorText);
+        throw new Error(`Gemini API error: ${response.status} - ${errorText}`);
       }
 
       const data = await response.json();
+      console.log('Gemini API response data keys:', Object.keys(data));
+      
       const aiText = data.candidates?.[0]?.content?.parts?.[0]?.text || "{}";
+      console.log('AI response text length:', aiText.length);
 
       return this.parseAIResponse(aiText);
     } catch (error) {
       console.error("Gemini analysis error:", error);
+      
+      // For development, return mock analysis if API fails
+      if (process.env.NODE_ENV === 'development') {
+        console.log('Development mode: Returning mock analysis');
+        return {
+          ats_score: 75,
+          strengths: ["Good technical skills", "Relevant experience"],
+          weaknesses: ["Could improve keyword matching"],
+          improvements: ["Add more specific keywords", "Quantify achievements"],
+          missing_keywords: ["React", "TypeScript"],
+          matched_keywords: ["JavaScript", "HTML", "CSS"],
+          summary: "Mock analysis for development"
+        };
+      }
+      
       throw new Error("Failed to analyze resume with AI");
     }
   }

@@ -30,6 +30,7 @@ const upload = multer({
 // Routes
 router.post('/analyze', verifyAuth, upload.single('resume'), ResumeController.uploadAndAnalyze);
 router.get('/history', verifyAuth, ResumeController.getAnalysisHistory);
+router.get('/stats', verifyAuth, ResumeController.getUserStats);
 router.get('/:id', verifyAuth, ResumeController.getAnalysisById);
 
 export default router;

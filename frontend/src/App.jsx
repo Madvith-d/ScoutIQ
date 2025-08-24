@@ -8,6 +8,7 @@ import Landing from './pages/LandingPage'
 import Login from './pages/LoginPage'
 import Signup from './pages/SignUpPage'
 import Home from './pages/HomePage'
+import Dashboard from './pages/DashboardPage'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { auth } from './firebase'
@@ -48,9 +49,10 @@ function App() {
       <Routes>
         <Route path="/" element={<Navigate to="/landing" replace />} />
         <Route path="/landing" element={<Landing />} />
-        <Route path="/login" element={!authUser ? <Login /> : <Navigate to="/home" replace />} />
-        <Route path="/signup" element={!authUser ? <Signup /> : <Navigate to="/home" replace />} />
+        <Route path="/login" element={!authUser ? <Login /> : <Navigate to="/dashboard" replace />} />
+        <Route path="/signup" element={!authUser ? <Signup /> : <Navigate to="/dashboard" replace />} />
         <Route path="/home" element={authUser ? <Home /> : <Navigate to="/login" replace />} />
+        <Route path="/dashboard" element={authUser ? <Dashboard /> : <Navigate to="/login" replace />} />
       </Routes>
     </div>
   )
