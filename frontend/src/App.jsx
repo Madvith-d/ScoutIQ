@@ -8,11 +8,17 @@ import Landing from './pages/LandingPage'
 import Login from './pages/LoginPage'
 import Signup from './pages/SignUpPage'
 import Home from './pages/HomePage'
-import Dashboard from './pages/DashboardPage'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { auth } from './firebase'
 import { onAuthStateChanged } from 'firebase/auth'
+import DashboardLayout from '@/components/layout/DashboardLayout'
+import { DashboardProvider } from '@/components/context/DashboardContext'
+import OverviewPage from '@/pages/dashboard/OverviewPage'
+import AnalyzePage from '@/pages/dashboard/AnalyzePage'
+import HistoryPage from '@/pages/dashboard/HistoryPage'
+import ResultsPage from '@/pages/dashboard/ResultsPage'
+import SettingsPage from '@/pages/dashboard/SettingsPage'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -43,16 +49,35 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen w-full bg-background flex items-center justify-center p-4 dark ">
+    <div className="min-h-screen w-full bg-background ">
       <ToastContainer position="top-right" autoClose={3000} />
-      
+
       <Routes>
         <Route path="/" element={<Navigate to="/landing" replace />} />
         <Route path="/landing" element={<Landing />} />
-        <Route path="/login" element={!authUser ? <Login /> : <Navigate to="/dashboard" replace />} />
-        <Route path="/signup" element={!authUser ? <Signup /> : <Navigate to="/dashboard" replace />} />
+        <Route path="/login" element={!authUser ? <Login /> : <Navigate to="/dashboard/overview" replace />} />
+        <Route path="/signup" element={!authUser ? <Signup /> : <Navigate to="/dashboard/overview" replace />} />
         <Route path="/home" element={authUser ? <Home /> : <Navigate to="/login" replace />} />
-        <Route path="/dashboard" element={authUser ? <Dashboard /> : <Navigate to="/login" replace />} />
+
+        <Route
+          path="/dashboard"
+          element={
+            authUser ? (
+              <DashboardProvider>
+                <DashboardLayout />
+              </DashboardProvider>
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        >
+          <Route index element={<Navigate to="overview" replace />} />
+          <Route path="overview" element={<OverviewPage />} />
+          <Route path="analyze" element={<AnalyzePage />} />
+          <Route path="history" element={<HistoryPage />} />
+          <Route path="results" element={<ResultsPage />} />
+          <Route path="settings" element={<SettingsPage />} />
+        </Route>
       </Routes>
     </div>
   )

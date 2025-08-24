@@ -23,23 +23,23 @@ const AnalysisDetail = ({
   showNewAnalysisButton = true 
 }) => {
   const getScoreColor = (score) => {
-    if (score >= 80) return 'text-green-600';
-    if (score >= 60) return 'text-yellow-600';
-    return 'text-red-600';
+    if (score >= 80) return 'text-primary';
+    if (score >= 60) return 'text-accent-foreground';
+    return 'text-destructive';
   };
 
   const getScoreBadge = (score) => {
-    if (score >= 80) return <Badge className="bg-green-100 text-green-800">Excellent</Badge>;
-    if (score >= 60) return <Badge className="bg-yellow-100 text-yellow-800">Good</Badge>;
-    return <Badge className="bg-red-100 text-red-800">Needs Work</Badge>;
+    if (score >= 80) return <Badge className="bg-accent text-accent-foreground">Excellent</Badge>;
+    if (score >= 60) return <Badge className="bg-secondary text-secondary-foreground">Good</Badge>;
+    return <Badge className="bg-destructive/10 text-destructive">Needs Work</Badge>;
   };
 
   if (!analysis) {
     return (
       <Card>
         <CardContent className="text-center py-8">
-          <Award className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-          <p className="text-gray-500">No analysis data available</p>
+          <Award className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+          <p className="text-muted-foreground">No analysis data available</p>
         </CardContent>
       </Card>
     );
@@ -66,7 +66,7 @@ const AnalysisDetail = ({
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <Award className="h-6 w-6 text-blue-600" />
+              <Award className="h-6 w-6 text-primary" />
               <div>
                 <CardTitle className="text-xl">Analysis Results</CardTitle>
                 <CardDescription>
@@ -108,23 +108,23 @@ const AnalysisDetail = ({
           </div>
           <Progress value={analysis.analysis?.ats_score || 0} className="h-3" />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-            <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
-              <div className="text-2xl font-bold text-green-600">
+            <div className="p-3 bg-muted rounded-lg">
+              <div className="text-2xl font-bold text-primary">
                 {analysis.analysis?.matched_keywords?.length || 0}
               </div>
-              <div className="text-sm text-gray-600">Matched Keywords</div>
+              <div className="text-sm text-muted-foreground">Matched Keywords</div>
             </div>
-            <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
-              <div className="text-2xl font-bold text-red-600">
+            <div className="p-3 bg-muted rounded-lg">
+              <div className="text-2xl font-bold text-destructive">
                 {analysis.analysis?.missing_keywords?.length || 0}
               </div>
-              <div className="text-sm text-gray-600">Missing Keywords</div>
+              <div className="text-sm text-muted-foreground">Missing Keywords</div>
             </div>
-            <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
-              <div className="text-2xl font-bold text-blue-600">
+            <div className="p-3 bg-muted rounded-lg">
+              <div className="text-2xl font-bold text-primary">
                 {analysis.analysis?.improvements?.length || 0}
               </div>
-              <div className="text-sm text-gray-600">Recommendations</div>
+              <div className="text-sm text-muted-foreground">Recommendations</div>
             </div>
           </div>
         </CardContent>
@@ -137,7 +137,7 @@ const AnalysisDetail = ({
             <CardTitle className="text-lg">Summary</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+            <p className="text-muted-foreground leading-relaxed">
               {analysis.analysis.summary}
             </p>
           </CardContent>
@@ -149,16 +149,16 @@ const AnalysisDetail = ({
         <Card>
           <CardHeader>
             <CardTitle className="text-lg flex items-center space-x-2">
-              <CheckCircle className="h-5 w-5 text-green-600" />
+              <CheckCircle className="h-5 w-5 text-primary" />
               <span>Strengths</span>
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
               {analysis.analysis.strengths.map((strength, index) => (
-                <div key={index} className="flex items-start space-x-3 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
-                  <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                  <span className="text-gray-700 dark:text-gray-300">{strength}</span>
+                <div key={index} className="flex items-start space-x-3 p-3 bg-accent rounded-lg border border-border">
+                  <CheckCircle className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                  <span className="text-muted-foreground">{strength}</span>
                 </div>
               ))}
             </div>
@@ -171,16 +171,16 @@ const AnalysisDetail = ({
         <Card>
           <CardHeader>
             <CardTitle className="text-lg flex items-center space-x-2">
-              <AlertTriangle className="h-5 w-5 text-yellow-600" />
+              <AlertTriangle className="h-5 w-5 text-accent-foreground" />
               <span>Areas for Improvement</span>
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
               {analysis.analysis.weaknesses.map((weakness, index) => (
-                <div key={index} className="flex items-start space-x-3 p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
-                  <AlertTriangle className="h-5 w-5 text-yellow-600 mt-0.5 flex-shrink-0" />
-                  <span className="text-gray-700 dark:text-gray-300">{weakness}</span>
+                <div key={index} className="flex items-start space-x-3 p-3 bg-muted rounded-lg border border-border">
+                  <AlertTriangle className="h-5 w-5 text-accent-foreground mt-0.5 flex-shrink-0" />
+                  <span className="text-muted-foreground">{weakness}</span>
                 </div>
               ))}
             </div>
@@ -193,16 +193,16 @@ const AnalysisDetail = ({
         <Card>
           <CardHeader>
             <CardTitle className="text-lg flex items-center space-x-2">
-              <Star className="h-5 w-5 text-blue-600" />
+              <Star className="h-5 w-5 text-primary" />
               <span>Recommendations</span>
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
               {analysis.analysis.improvements.map((improvement, index) => (
-                <div key={index} className="flex items-start space-x-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-                  <Star className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
-                  <span className="text-gray-700 dark:text-gray-300">{improvement}</span>
+                <div key={index} className="flex items-start space-x-3 p-3 bg-muted rounded-lg border border-border">
+                  <Star className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                  <span className="text-muted-foreground">{improvement}</span>
                 </div>
               ))}
             </div>
@@ -215,14 +215,12 @@ const AnalysisDetail = ({
         {analysis.analysis?.matched_keywords?.length > 0 && (
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg text-green-700 dark:text-green-300">
-                Matched Keywords
-              </CardTitle>
+              <CardTitle className="text-lg">Matched Keywords</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex flex-wrap gap-2">
                 {analysis.analysis.matched_keywords.map((keyword, index) => (
-                  <Badge key={index} variant="secondary" className="bg-green-100 text-green-800 border-green-200">
+                  <Badge key={index} variant="secondary" className="border-border">
                     {keyword}
                   </Badge>
                 ))}
@@ -234,14 +232,12 @@ const AnalysisDetail = ({
         {analysis.analysis?.missing_keywords?.length > 0 && (
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg text-red-700 dark:text-red-300">
-                Missing Keywords
-              </CardTitle>
+              <CardTitle className="text-lg">Missing Keywords</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex flex-wrap gap-2">
                 {analysis.analysis.missing_keywords.map((keyword, index) => (
-                  <Badge key={index} variant="secondary" className="bg-red-100 text-red-800 border-red-200">
+                  <Badge key={index} variant="secondary" className="border-border">
                     {keyword}
                   </Badge>
                 ))}
@@ -258,8 +254,8 @@ const AnalysisDetail = ({
             <CardTitle className="text-lg">Job Description</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-              <p className="text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
+            <div className="p-4 bg-muted rounded-lg">
+              <p className="text-muted-foreground whitespace-pre-wrap">
                 {analysis.jobDescription}
               </p>
             </div>
