@@ -3,7 +3,7 @@
 <div align="center">
   <img src="logo.png" alt="ScoutIQ Logo" width="200" height="auto">
   <br>
-  <img src="icon.png" alt="ScoutIQ Icon" width="64" height="64">
+
   
   [![React](https://img.shields.io/badge/React-19.1.1-blue.svg)](https://reactjs.org/)
   [![Vite](https://img.shields.io/badge/Vite-7.1.2-purple.svg)](https://vitejs.dev/)
@@ -17,7 +17,7 @@
 </div>
 
 ---
-<img src="scoutiq_architecture_diagram.png" width="900" height="auto">
+<img src="scoutiq_architecture_diagram.png" width="1100" height="auto">
 <br>
 
 ## 🚀 Overview
