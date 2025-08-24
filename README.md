@@ -17,7 +17,7 @@
 </div>
 
 ---
-<img src="scoutiq_architecture_diagram.png" width="500" height="auto">
+<img src="scoutiq_architecture_diagram.png" width="900" height="auto">
 <br>
 
 ## 🚀 Overview
